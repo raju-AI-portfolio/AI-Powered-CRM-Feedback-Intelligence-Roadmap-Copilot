@@ -1,5 +1,4 @@
 # AI-Powered-CRM-Feedback-Intelligence-Roadmap-Copilot
-# AI-Powered CRM Feedback Intelligence & Roadmap Copilot
 
 An AI-powered product intelligence system that aggregates customer feedback from CRM, sales, support, and survey channels, extracts product themes and feature requests using LLMs, scores them by business impact, and generates evidence-backed roadmap recommendations for enterprise SaaS teams.
 
