@@ -87,6 +87,10 @@ Product and operations teams face a constant challenge: customer feedback arrive
 
 ---
 
+<img width="452" height="301" alt="image" src="https://github.com/user-attachments/assets/09daff80-cfe7-473e-aee9-5c3aabbd3c08" />
+
+---
+
 ## ✨ Key Features
 
 ### 📥 Flexible CSV Ingestion
