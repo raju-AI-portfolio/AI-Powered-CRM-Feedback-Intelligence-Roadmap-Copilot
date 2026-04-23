@@ -85,9 +85,9 @@ Product and operations teams face a constant challenge: customer feedback arrive
 └──────────────────────────────────────┘
 ```
 
-<p align="center">
-  <img src="architecture.png" alt="AI-Powered CRM Feedback Intelligence & Roadmap Copilot — Architecture Diagram" width="900"/>
-</p>
+---
+<img width="1536" height="1024" alt="architecture" src="https://github.com/user-attachments/assets/91428f44-1ae8-47dc-b587-397b5f22264a" />
+
 
 ---
 
