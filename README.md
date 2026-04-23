@@ -79,10 +79,6 @@ Product teams are drowning in feedback scattered across support tickets, NPS sur
   (Quarterly plan)    (Ranked themes)    (Stakeholder docs)
 ```
 
-<p align="center">
-  <img src="architecture.png" alt="AI-Powered CRM Feedback Intelligence & Roadmap Copilot — Architecture Diagram" width="900"/>
-</p>
-
 ---
 
 ## ✨ Key Features
