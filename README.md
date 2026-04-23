@@ -105,7 +105,33 @@ Real-world customer feedback data is often messy. This project implements a robu
 - AI insights output  
 - Data preview  
 
+--
+📊 Example Output
+Top recurring customer issues
+Product improvement recommendations
+Business impact analysis
+Structured AI-generated insights
+🧠 Key Learnings
+Handling noisy real-world datasets
+Data cleaning and preprocessing pipelines
+NLP-based feature engineering
+Hybrid rule-based + AI analysis
+Prompt engineering for structured insights
+Building interactive analytics dashboards
+🔮 Future Improvements
+Advanced NLP (BERT / embeddings)
+Multi-source data integration (CRM, support tickets)
+Real-time processing
+Cloud deployment (AWS / Streamlit Cloud)
+📌 Conclusion
+
+This project demonstrates how AI and NLP can transform raw customer feedback into structured, actionable insights, enabling data-driven product decision-making.
+
+
 ---
+
+
+
 
 ## ▶️ How to Run
 
@@ -127,24 +153,5 @@ streamlit run app.py
 ---
 
 
-📊 Example Output
-Top recurring customer issues
-Product improvement recommendations
-Business impact analysis
-Structured AI-generated insights
-🧠 Key Learnings
-Handling noisy real-world datasets
-Data cleaning and preprocessing pipelines
-NLP-based feature engineering
-Hybrid rule-based + AI analysis
-Prompt engineering for structured insights
-Building interactive analytics dashboards
-🔮 Future Improvements
-Advanced NLP (BERT / embeddings)
-Multi-source data integration (CRM, support tickets)
-Real-time processing
-Cloud deployment (AWS / Streamlit Cloud)
-📌 Conclusion
 
-This project demonstrates how AI and NLP can transform raw customer feedback into structured, actionable insights, enabling data-driven product decision-making.
 
