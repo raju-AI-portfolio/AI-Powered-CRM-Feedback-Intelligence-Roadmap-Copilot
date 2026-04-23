@@ -1,184 +1,148 @@
-# 🧠 AI-Powered CRM Feedback Intelligence & Roadmap Copilot
+# 🤖 AI-Powered Customer Review Intelligence
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Claude_API-Anthropic-6B48FF?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/sentence--transformers-HuggingFace-FFD21E?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Status-Production_Ready-28A745?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/OpenAI_API-412991?style=for-the-badge&logo=openai&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white"/>
+  <img src="https://img.shields.io/badge/TextBlob-NLP-4CAF50?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Status-Shipped-28A745?style=for-the-badge"/>
 </p>
 
 <p align="center">
-  <strong>An end-to-end Generative AI pipeline that transforms raw customer feedback from 15+ sources into data-driven, quarterly roadmap proposals — replacing days of manual analysis with minutes.</strong>
+  <strong>An end-to-end AI pipeline that transforms raw, unstructured customer feedback into structured product insights, sentiment analysis, issue detection, and LLM-generated business recommendations — all through an interactive Streamlit dashboard.</strong>
 </p>
 
 ---
 
 ## 📌 Problem Statement
 
-Product teams are drowning in feedback scattered across support tickets, NPS surveys, app store reviews, sales calls, and community forums. Prioritisation decisions are largely subjective, ARR-weighted customer voices get lost, and the gap between customer pain and roadmap reality grows wider every sprint.
+Product and operations teams face a constant challenge: customer feedback arrives in high volume, across multiple channels, and in completely unstructured form. Making sense of it requires:
 
-> **This project solves that.** It aggregates all feedback, uses Claude AI to extract themes and feature requests, calculates data-driven impact scores, and auto-generates quarterly roadmap recommendations — complete with customer-quote justifications and stakeholder-ready one-pagers.
+- Manual reading and tagging of hundreds or thousands of reviews
+- Subjective sentiment assessment with no consistent scoring methodology
+- No repeatable process to convert raw voice-of-customer into roadmap decisions
+
+> **This project automates that entire workflow** — from raw CSV upload through AI-generated, business-ready product recommendations — in a single, interactive web application.
 
 ---
 
 ## 🎯 Business Impact
 
-| Metric | Before | After |
-|--------|--------|-------|
-| Feedback coverage | ~40% (manual sampling) | **100%** (automated ingestion) |
-| Time to roadmap decision | 3–5 days | **< 30 minutes** |
-| Prioritisation basis | Opinion-driven | **ARR × Frequency × Urgency score** |
-| Customer-driven features | ~20% of roadmap | **Target: 45%+** |
-| Stakeholder one-pagers | 2–3 hrs per feature | **Auto-generated** |
+| Manual Process | With This System |
+|----------------|-----------------|
+| Hours of manual review tagging | **Automated classification in seconds** |
+| Subjective sentiment assessment | **Quantified sentiment scores via NLP** |
+| Ad hoc issue identification | **Hybrid rule-based + AI issue detection** |
+| No structured recommendations | **LLM-generated insights with business context** |
+| Static reports in spreadsheets | **Interactive, filterable live dashboard** |
 
 ---
 
 ## 🏗️ Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                         DATA SOURCES                                │
-│  App Store Reviews │ NPS Surveys │ Sales Notes │ Support Tickets    │
-│         Community Forums │ In-App Feedback │ CRM Data              │
-└───────────────────────────┬─────────────────────────────────────────┘
-                            │
-                    ┌───────▼────────┐
-                    │  ① INGEST      │  csv_loader.py / synthetic_data.py
-                    │  pandas DF     │  Kaggle CSV or synthetic fallback
-                    └───────┬────────┘
-                            │
-                    ┌───────▼────────┐
-                    │  ② CLASSIFY    │  Claude API (batch=10)
-                    │  4 categories  │  bug · feature · usability · integration
-                    └───────┬────────┘
-                            │
-                    ┌───────▼────────┐
-                    │  ③ EXTRACT     │  Claude API (structured JSON)
-                    │  metadata      │  feature · urgency · pain · sentiment
-                    └───────┬────────┘
-                            │
-                    ┌───────▼────────┐
-                    │  ④ CLUSTER     │  sentence-transformers + KMeans
-                    │  themes        │  Embeddings → N clusters → Claude naming
-                    └───────┬────────┘
-                            │
-                    ┌───────▼────────┐
-                    │  ⑤ SCORE       │  Weighted formula
-                    │  impact 0–100  │  ARR(40%) × Freq(35%) × Urgency(25%)
-                    └───────┬────────┘
-                            │
-                    ┌───────▼────────┐
-                    │  ⑥ GENERATE    │  Claude API (roadmap + one-pagers)
-                    │  roadmap       │  Quarterly plan · Feature justifications
-                    └───────┬────────┘
-                            │
-          ┌─────────────────┼──────────────────┐
-          ▼                 ▼                  ▼
-  roadmap_report.md   impact_scores.csv  feature_onepagers/
-  (Quarterly plan)    (Ranked themes)    (Stakeholder docs)
+┌──────────────────────────────────────┐
+│           INPUT LAYER                │
+│   Customer Feedback CSV Upload       │
+│  (App store · NPS · Support tickets) │
+└──────────────────┬───────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────┐
+│    DATA CLEANING & PREPROCESSING     │
+│  • Null / duplicate removal          │
+│  • Type normalisation                │
+│  • Text stripping & validation       │
+│  • Token-length capping              │
+└──────────────────┬───────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────┐
+│        FEATURE ENGINEERING           │
+│  • Sentiment scoring (TextBlob)      │
+│  • Polarity & subjectivity scores    │
+│  • Issue flag detection              │
+│  • Rule-based hybrid logic           │
+└──────────────────┬───────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────┐
+│      AI INSIGHT GENERATION           │
+│  • LLM prompt engineering            │
+│  • Top issues extraction             │
+│  • Business impact analysis          │
+│  • Product improvement suggestions   │
+└──────────────────┬───────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────┐
+│       STREAMLIT DASHBOARD            │
+│  • Data preview & stats              │
+│  • Sentiment distribution charts     │
+│  • AI insights rendered live         │
+│  • Filterable, interactive UI        │
+└──────────────────────────────────────┘
 ```
+
+<p align="center">
+  <img src="architecture.png" alt="AI-Powered CRM Feedback Intelligence & Roadmap Copilot — Architecture Diagram" width="900"/>
+</p>
 
 ---
 
 ## ✨ Key Features
 
-### 🔍 Multi-Source Feedback Ingestion
-- Loads real app store reviews from [Kaggle dataset](https://www.kaggle.com/datasets/sanlian/app-store-reviews-for-a-mobile-app) (date, platform, country, star rating, issue flag)
-- Auto-generates realistic synthetic feedback (200+ records) when CSV is unavailable — simulating Zendesk tickets, NPS responses, sales notes, and community posts
-- Normalised schema across all sources for unified downstream processing
+### 📥 Flexible CSV Ingestion
+- Upload any customer feedback CSV directly through the browser
+- Auto-detects the review/text column — works across different dataset formats
+- Handles real-world Kaggle datasets (app store reviews, NPS exports, support tickets)
 
-### 🏷️ AI-Powered Classification (Claude API)
-- Classifies every feedback item into one of four product categories: `bug_report`, `feature_request`, `usability_issue`, `integration_request`
-- Batch processing (10 items/call) to minimise API costs
-- Confidence scoring on every classification with graceful fallback handling
+### 🧹 Robust Data Cleaning Pipeline
 
-### 🧬 Structured Metadata Extraction (Claude API)
-For each item, Claude extracts:
-- **Feature name** — short, actionable label (≤6 words)
-- **Reason** — why the user needs it (1 sentence)
-- **Urgency** — `low / medium / high`
-- **User segment** — `Enterprise / Mid-Market / SMB / Free / Unknown`
-- **Pain score** — 1–10 integer
-- **Sentiment** — `positive / neutral / negative`
+The system automatically handles common real-world data quality issues:
 
-### 🔵 Semantic Theme Clustering
-- Generates sentence embeddings using `all-MiniLM-L6-v2` (runs fully offline)
-- L2-normalised vectors → KMeans clustering (configurable N clusters)
-- Claude auto-names each cluster with a 5-word theme name and one-sentence description
-- Tracks theme volume and composition for trend analysis
+| Issue | Method |
+|-------|--------|
+| Missing / null reviews | `dropna()` — removes invalid rows |
+| Duplicate submissions | `drop_duplicates()` — prevents repeated signals |
+| Mixed data types | Type coercion to consistent string format |
+| Whitespace & empty strings | `.str.strip()` + empty string filter |
+| Token overflow in LLM | Input length capping — controls cost and latency |
+| Inconsistent column names | Flexible column detection with fallback logic |
 
-### 📊 Data-Driven Impact Scoring
-Composite score (0–100) per theme using normalised, weighted formula:
+### 🧠 NLP-Based Feature Engineering
+Using **TextBlob**, each feedback item is enriched with:
+- **Polarity score** — measures positive/negative sentiment (−1.0 to +1.0)
+- **Subjectivity score** — distinguishes factual reports from opinions (0.0 to 1.0)
+- **Sentiment label** — `Positive / Neutral / Negative` classification
+- **Issue flag** — hybrid rule-based detection of bug and usability signals
 
-```
-Impact Score = (ARR_weight × ARR_norm) + (Freq_weight × Freq_norm) + (Urgency_weight × Urgency_norm)
+### 🤖 LLM-Powered Insight Generation (OpenAI API)
+Structured prompt engineering extracts three distinct insight types:
+- **Top recurring issues** — what customers are most frequently experiencing
+- **Business impact analysis** — the commercial risk and opportunity in the feedback
+- **Product improvement suggestions** — prioritised, actionable recommendations for the product team
 
-Default weights:   ARR = 40%  |  Frequency = 35%  |  Urgency = 25%
-```
-
-ARR tiers (configurable): Enterprise $120K · Mid-Market $40K · SMB $8K · Free $0
-
-### 📋 Quarterly Roadmap Generation (Claude API)
-- Assigns top-N features to quarters based on complexity and impact
-- Each feature includes: "Why We're Building This" narrative, expected business outcomes, and 2–3 success metrics
-- Auto-generates **per-feature stakeholder one-pagers** in Markdown
-- Full executive summary with coverage stats and top theme highlights
+### 📊 Interactive Streamlit Dashboard
+- Live data preview with row counts and column summary
+- Sentiment distribution visualisation
+- AI insights rendered with clean formatting
+- No-code interface — accessible to PMs, analysts, and non-technical stakeholders
 
 ---
 
 ## 📁 Project Structure
 
 ```
-product_feedback_intelligence/
+AI-Powered-Customer-Review/
 │
-├── main.py                          # Entry point — runs full 6-step pipeline
-│
-├── config/
-│   └── settings.py                  # All config: weights, model, paths, thresholds
-│
-├── src/
-│   ├── ingestion/
-│   │   ├── csv_loader.py            # Kaggle CSV loader with flexible column mapping
-│   │   └── synthetic_data.py        # Realistic synthetic feedback generator
-│   │
-│   ├── processing/
-│   │   ├── classifier.py            # Claude: 4-category classification + confidence
-│   │   └── extractor.py             # Claude: structured metadata extraction
-│   │
-│   ├── clustering/
-│   │   └── theme_clusterer.py       # Embeddings + KMeans + Claude theme naming
-│   │
-│   ├── scoring/
-│   │   └── impact_scorer.py         # ARR × Frequency × Urgency weighted scoring
-│   │
-│   ├── roadmap/
-│   │   └── roadmap_generator.py     # Claude: quarterly roadmap + feature one-pagers
-│   │
-│   └── utils/
-│       ├── logger.py                # Structured console logging
-│       └── helpers.py               # JSON parsing, chunking utilities
-│
-├── data/
-│   └── README.txt                   # Dataset download instructions
-│
-├── outputs/                         # All generated files land here
-│   ├── classified_feedback.csv
-│   ├── clustered_themes.csv
-│   ├── impact_scores.csv
-│   ├── roadmap_report.md
-│   └── feature_onepagers/
-│
-├── notebooks/
-│   └── exploration.ipynb            # Interactive EDA + visualisations
-│
-├── tests/
-│   └── test_pipeline.py             # Unit tests (no API key required)
-│
-├── requirements.txt
-├── pytest.ini
-├── .env.example
-└── .gitignore
+├── app.py                    # Streamlit app — main entry point
+├── requirements.txt          # Python dependencies
+├── .env.example              # API key template
+├── architecture.png          # System architecture diagram
+├── .gitignore
+└── README.md
 ```
 
 ---
@@ -187,21 +151,25 @@ product_feedback_intelligence/
 
 ### Prerequisites
 - Python 3.11+
-- An [Anthropic API key](https://console.anthropic.com/)
+- An [OpenAI API key](https://platform.openai.com/api-keys)
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/raju-AI-portfolio/AI-Powered-CRM-Feedback-Intelligence-Roadmap-Copilot.git
-cd AI-Powered-CRM-Feedback-Intelligence-Roadmap-Copilot
+git clone https://github.com/raju-AI-portfolio/AI-Powered-Customer-Review.git
+cd AI-Powered-Customer-Review
 ```
 
-### 2. Create virtual environment
+### 2. Create and activate a virtual environment
 
 ```bash
-python -m venv venv
-source venv/bin/activate        # Mac / Linux
-venv\Scripts\activate           # Windows
+python -m venv .venv
+
+# Mac / Linux
+source .venv/bin/activate
+
+# Windows
+.venv\Scripts\activate
 ```
 
 ### 3. Install dependencies
@@ -210,219 +178,106 @@ venv\Scripts\activate           # Windows
 pip install -r requirements.txt
 ```
 
-> **Note:** `sentence-transformers` will download the `all-MiniLM-L6-v2` model (~80MB) on first run. This only happens once and is cached locally.
-
-### 4. Configure your API key
+### 4. Set your OpenAI API key
 
 ```bash
+# Option A — environment variable (recommended)
+export OPENAI_API_KEY="sk-your-key-here"
+
+# Option B — copy the example file and edit it
 cp .env.example .env
+# Then open .env and set OPENAI_API_KEY=sk-your-key-here
 ```
 
-Edit `.env` and add your key:
-```
-ANTHROPIC_API_KEY=sk-ant-your-key-here
-```
-
-Or export directly:
-```bash
-export ANTHROPIC_API_KEY="sk-ant-your-key-here"
-```
-
-### 5. (Optional) Add the Kaggle dataset
-
-Download the app store reviews CSV from:
-**[https://www.kaggle.com/datasets/sanlian/app-store-reviews-for-a-mobile-app](https://www.kaggle.com/datasets/sanlian/app-store-reviews-for-a-mobile-app)**
-
-Place the file at: `data/app_store_reviews.csv`
-
-> If the CSV is not found, the pipeline automatically generates 200 synthetic feedback records and continues without interruption.
-
-### 6. Run the full pipeline
+### 5. Launch the dashboard
 
 ```bash
-python main.py
+streamlit run app.py
 ```
 
-**Expected output:**
-```
-============================================================
-  Product Feedback Intelligence Engine — Starting
-============================================================
-
-[1/6] Ingesting feedback data…
-[2/6] Classifying feedback…
-        Batch 1/20 … Batch 20/20
-[3/6] Extracting feature metadata…
-[4/6] Clustering into themes…
-        Cluster 0: 'CSV Export & Reporting'  (28 items)
-        Cluster 1: 'Mobile Performance Issues'  (24 items)
-        ...
-[5/6] Scoring theme impact…
-        # 1  CSV Export & Reporting         score=87.4
-        # 2  SSO / Enterprise Auth          score=79.1
-        ...
-[6/6] Generating roadmap…
-
-============================================================
-  Pipeline complete! All outputs in the 'outputs/' folder.
-============================================================
-```
+The app opens automatically at `http://localhost:8501`
 
 ---
 
-## ⚙️ Configuration Reference
+## 💡 How to Use
 
-All settings live in `config/settings.py`. Key parameters:
+1. **Upload your CSV** — click "Browse files" and select any customer feedback dataset
+2. **Preview the data** — the app detects the review column and shows a cleaned preview
+3. **Review sentiment scores** — see polarity distribution across all feedback items
+4. **Read AI insights** — scroll down for LLM-generated issues, impact analysis, and recommendations
+5. **Iterate** — upload a different dataset or date range and re-run instantly
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `CLAUDE_MODEL` | `claude-sonnet-4-20250514` | Claude model to use |
-| `BATCH_SIZE` | `10` | Feedback items per API call |
-| `N_CLUSTERS` | `8` | Number of theme clusters |
-| `EMBEDDING_MODEL` | `all-MiniLM-L6-v2` | Sentence-transformers model |
-| `ARR_WEIGHT` | `0.40` | Weight for ARR in impact score |
-| `FREQUENCY_WEIGHT` | `0.35` | Weight for mention frequency |
-| `URGENCY_WEIGHT` | `0.25` | Weight for urgency/pain |
-| `TOP_N_FEATURES` | `5` | Features included in roadmap |
-| `N_SYNTHETIC_RECORDS` | `200` | Fallback synthetic record count |
-
-**Tuning the impact score weights:** The three weights must sum to `1.0`. Adjust based on your business context — e.g., increase `ARR_WEIGHT` if Enterprise retention is the top priority, or `URGENCY_WEIGHT` if NPS improvement is the goal.
-
----
-
-## 📤 Outputs
-
-After running the pipeline, the `outputs/` directory contains:
-
-| File | Description |
-|------|-------------|
-| `classified_feedback.csv` | Every feedback item with `label` and `confidence` columns |
-| `clustered_themes.csv` | Full dataset with `cluster`, `theme_name`, `theme_description` |
-| `impact_scores.csv` | One row per theme: rank, score, ARR, mentions, sample quotes |
-| `roadmap_report.md` | Full quarterly roadmap with executive summary and impact table |
-| `feature_onepagers/*.md` | One stakeholder-ready one-pager per top-N feature |
-
-### Sample `impact_scores.csv`
-
-```
-rank | theme_name                  | impact_score | mention_count | total_arr
------|-----------------------------|--------------|----|----------
-1    | CSV Export & Reporting      | 87.4         | 28 | $840,000
-2    | SSO / Enterprise Auth       | 79.1         | 22 | $1,200,000
-3    | Mobile Offline Mode         | 71.3         | 19 | $320,000
-...
-```
-
-### Sample `roadmap_report.md` (excerpt)
-
-```markdown
-# Product Feedback Intelligence — Roadmap Report
-Generated: 2025-07-15 09:32
-
-## Executive Summary
-- Total feedback items analysed: 200
-- Distinct themes identified: 8
-- Top impact feature: CSV Export & Reporting (score: 87.4)
-
-## Q3 2025 — Foundation Sprint
-### CSV Export & Reporting (Impact: 87.4)
-**Why We're Building This:** 28 customers representing $840K ARR
-have flagged the absence of bulk CSV export as a weekly operational
-blocker. Enterprise users are manually copying data — a 2–3 hour
-weekly overhead per team...
-```
-
----
-
-## 🧪 Running Tests
-
-Unit tests cover core utilities and the impact scorer without requiring an API key:
-
-```bash
-pytest tests/ -v
-```
-
-```
-tests/test_pipeline.py::TestHelpers::test_safe_json_parse_clean         PASSED
-tests/test_pipeline.py::TestHelpers::test_safe_json_parse_with_fences   PASSED
-tests/test_pipeline.py::TestHelpers::test_chunk_list                     PASSED
-tests/test_pipeline.py::TestSyntheticData::test_generates_correct_count  PASSED
-tests/test_pipeline.py::TestSyntheticData::test_no_empty_text            PASSED
-tests/test_pipeline.py::TestImpactScorer::test_impact_score_range        PASSED
-tests/test_pipeline.py::TestImpactScorer::test_ranked_descending         PASSED
-...
-```
-
----
-
-## 📓 Exploratory Notebook
-
-Launch the Jupyter notebook for interactive analysis and visualisations:
-
-```bash
-cd notebooks
-jupyter notebook exploration.ipynb
-```
-
-The notebook includes:
-- Label distribution bar charts
-- Impact score scatter plot (mentions vs ARR, bubble size = score)
-- Full roadmap Markdown rendering in-notebook
-- Step-by-step pipeline execution with cell-level outputs
-
----
-
-## 🔌 Extending the Pipeline
-
-### Add a new feedback source
-
-1. Create a new loader in `src/ingestion/` that returns a DataFrame with columns: `feedback_id`, `source`, `text`, `star_rating`, `platform`, `country`, `segment`
-2. Call it in `main.py`'s `_load_data()` function alongside existing sources
-3. Use `pd.concat()` to merge with the existing DataFrame
-
-### Integrate with a real CRM
-
-```python
-# Example: pull from Salesforce via simple-salesforce
-from simple_salesforce import Salesforce
-sf = Salesforce(username=..., password=..., security_token=...)
-cases = sf.query("SELECT Id, Description, Account.AnnualRevenue FROM Case")
-df = pd.DataFrame(cases['records'])
-```
-
-### Swap the embedding model
-
-Update `EMBEDDING_MODEL` in `config/settings.py` to any [sentence-transformers model](https://www.sbert.net/docs/pretrained_models.html):
-```python
-EMBEDDING_MODEL = "all-mpnet-base-v2"   # Higher accuracy, slower
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"    # Default — fast and accurate
-```
+### Compatible dataset formats
+The app works with any CSV containing a text/review column. Tested with:
+- [App Store Reviews — Kaggle](https://www.kaggle.com/datasets/sanlian/app-store-reviews-for-a-mobile-app)
+- NPS survey exports
+- Zendesk / Intercom ticket exports
+- Google Play Store review CSVs
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| LLM / AI | [Anthropic Claude API](https://docs.anthropic.com) (`claude-sonnet-4`) |
-| Embeddings | [sentence-transformers](https://www.sbert.net/) `all-MiniLM-L6-v2` |
-| Clustering | [scikit-learn](https://scikit-learn.org/) KMeans |
-| Data Processing | [pandas](https://pandas.pydata.org/) · [NumPy](https://numpy.org/) |
-| Testing | [pytest](https://pytest.org/) |
-| Notebook | [Jupyter](https://jupyter.org/) |
-| Dataset | [Kaggle — App Store Reviews](https://www.kaggle.com/datasets/sanlian/app-store-reviews-for-a-mobile-app) |
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Language | Python 3.11+ | Core runtime |
+| Data Processing | Pandas | Cleaning, transformation, aggregation |
+| NLP | TextBlob | Sentiment scoring, polarity, subjectivity |
+| LLM Integration | OpenAI API | Insight generation, prompt engineering |
+| Frontend / UI | Streamlit | Interactive web dashboard |
 
 ---
 
-## 🗺️ Roadmap — Planned Enhancements
+## 📊 Example Output
 
-- [ ] **Streamlit Dashboard** — real-time impact score visualisation and roadmap explorer
-- [ ] **Live CRM Connectors** — Zendesk, Intercom, Salesforce, Gong API integrations via N8N
-- [ ] **Trend Tracking** — theme volume over time with week-on-week delta alerts
-- [ ] **Auto-Notification** — Slack/email alert to customers when their requested feature ships
-- [ ] **Adoption Feedback Loop** — track feature adoption vs original request volume post-launch
-- [ ] **Multi-Language Support** — extend classification and extraction to non-English feedback
-- [ ] **Pinecone Integration** — replace in-memory clustering with persistent vector store for large-scale datasets
+**Sentiment Distribution**
+```
+Positive  ████████████████████  52%
+Neutral   ██████████            27%
+Negative  ████████              21%
+```
+
+**Sample AI-Generated Insights**
+
+> **Top Issues Identified:**
+> 1. App crashes frequently on export — reported by 34% of negative reviewers
+> 2. Login failures and session timeouts — second most cited frustration
+> 3. Missing bulk operations — requested by power users across segments
+>
+> **Business Impact:**
+> The crash-on-export issue carries significant churn risk for high-frequency users.
+> Login reliability problems are disproportionately represented in 1-star reviews,
+> suggesting they are deal-breakers rather than minor friction points.
+>
+> **Product Recommendations:**
+> 1. Prioritise export stability fix for next sprint — highest user-visible impact
+> 2. Investigate session management — possible token expiry misconfiguration
+> 3. Add bulk select + action as a Q3 feature based on request volume
+
+---
+
+## 🧠 Key Technical Decisions
+
+**Why TextBlob for sentiment?**
+TextBlob provides fast, dependency-free sentiment scoring without requiring a GPU or API call — keeping the feature engineering layer offline, low-latency, and cost-free. For production scale, this layer can be swapped for a fine-tuned transformer model.
+
+**Why hybrid rule-based + AI?**
+Rule-based issue detection (keyword matching, star rating thresholds) runs instantly on the full dataset and provides structured signals. The LLM layer then synthesises those signals into narrative insights — combining the reliability of deterministic logic with the expressiveness of generative AI.
+
+**Why structured prompt engineering?**
+The OpenAI prompts are engineered to request three specific, distinct output sections (issues · impact · recommendations) rather than a generic summary. This ensures the output is consistently structured and directly actionable for product decision-making.
+
+---
+
+## 🔮 Planned Enhancements
+
+- [ ] **Advanced embeddings** — replace TextBlob with `sentence-transformers` for semantic clustering
+- [ ] **Theme clustering** — group similar feedback into named themes using KMeans
+- [ ] **ARR-weighted scoring** — link feedback to customer segment and revenue impact
+- [ ] **Multi-source ingestion** — connect to Zendesk, Intercom, and Salesforce APIs directly
+- [ ] **Real-time processing** — webhook-triggered pipeline for live feedback streams
+- [ ] **Roadmap generation** — auto-produce quarterly roadmap proposals from scored themes
+- [ ] **Cloud deployment** — one-click deploy to Streamlit Cloud or AWS
 
 ---
 
@@ -437,9 +292,13 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"    # Default — fast and accurate
 - 📧 rajucanon@yahoo.com
 
 **Other projects in this portfolio:**
-- [Regulatory Compliance Intelligence Copilot](https://github.com/raju-AI-portfolio/Regulatory-Compliance-Intelligence-Copilot-with-Human-Review-) — Production RAG system · GDPR/HIPAA/NIST · 95%+ accuracy
-- [Airline Customer Support Multi-Agent System](https://github.com/raju-AI-portfolio/airline-customer-support-system) — LangGraph · Multi-agent orchestration
-- [Customer Query Automation — N8N RAG Workflow](https://github.com/raju-AI-portfolio/Customer-Query-Response-Automation-using-N8N-RAG-Based-Workflow-) — N8N · No-code AI automation
+
+| Project | Description |
+|---------|-------------|
+| [Regulatory Compliance Copilot](https://github.com/raju-AI-portfolio/Regulatory-Compliance-Intelligence-Copilot-with-Human-Review-) | Production RAG · GDPR/HIPAA/NIST · 95%+ accuracy · Human-in-the-loop |
+| [Airline Customer Support Agent](https://github.com/raju-AI-portfolio/airline-customer-support-system) | Multi-agent system · LangGraph · Intent classification · Safety guardrails |
+| [N8N RAG Workflow Automation](https://github.com/raju-AI-portfolio/Customer-Query-Response-Automation-using-N8N-RAG-Based-Workflow-) | No-code AI automation · Pinecone · Multi-channel delivery |
+| [Feedback Intelligence & Roadmap Copilot](https://github.com/raju-AI-portfolio/AI-Powered-CRM-Feedback-Intelligence-Roadmap-Copilot) | Full pipeline · Clustering · Impact scoring · Roadmap generation |
 
 ---
 
@@ -450,5 +309,5 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 <p align="center">
-  <em>Built with ❤️ to give the customer's voice its rightful place in every product roadmap.</em>
+  <em>Turning the raw voice of the customer into the clearest signal on your product roadmap.</em>
 </p>
