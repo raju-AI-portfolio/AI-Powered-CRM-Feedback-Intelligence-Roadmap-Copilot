@@ -123,6 +123,10 @@ pip install -r requirements.txt
 export OPENAI_API_KEY="your_api_key_here"
 5. Run the app
 streamlit run app.py
+
+---
+
+
 📊 Example Output
 Top recurring customer issues
 Product improvement recommendations
